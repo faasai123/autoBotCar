@@ -13,7 +13,17 @@ hat = Hat()
 hl = HuskyLensLibrary("I2C","",address=0x32)
 
 # time functions
- 
+
+def until_finds_hat(t):
+    try:
+        return Hat()
+    except:
+        if(t>0):
+            time.sleep(1)
+            return until_finds_hat(t-1)
+        else:
+            return False
+
 def cal_timeneeded(distance,speedL,speedR):
     # calculate time needed for each given movement
     time
@@ -82,14 +92,15 @@ def movestraight(speed, t, block):
 
 # main starts here
 # movestraight(100,10,False)
-
-time.sleep(1)
-if validlearnedblocks():
-    current = searchlearnedblocks()
-    if current!=-1:
-        speed = decide(current)
-        if speed != [-1,-1]: # if founded red or green
-            moveseperately(speed[0],speed[1],False,1) # dist is still fixed case for testing -> t is always 2 s
+# recursive function to wait for hat to be connected
+if until_finds_hat(30) is not None: # set maximum find time to 30 seconds
+    time.sleep(1)
+    if validlearnedblocks():
+        current = searchlearnedblocks()
+        if current!=-1:
+            speed = decide(current)
+            if speed != [-1,-1]: # if founded red or green
+                moveseperately(speed[0],speed[1],False,1) # dist is still fixed case for testing -> t is always 2 s
 
 # while True:
 #     print(motor.get_aposition())
