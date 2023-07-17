@@ -61,7 +61,7 @@ def moveseperately(speedL,speedR,block,dist):
     # t = cal_timeneeded(dist,speedL,speedR)
     t = 2 # fixed case for testing
     
-    # run motor L and R for t seconds with blocking setting (True = Wait for first op to end before running,
+    # run motor L and R for t seconds with blocking setting (True = Wait for first operation to end before running,
     # False = Run simultaneously)
     motorL.run_for_seconds(t, blocking=block)
     motorR.run_for_seconds(t, blocking=block)
