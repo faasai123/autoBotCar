@@ -21,11 +21,14 @@ print("Latest login =",current_time)
 # recursive function to wait for hat to be connected
 if until_finds_hat(30) is not None: # set maximum find time to 30 seconds
     # basic motor function for visual proof that program is actually run on startup
-    time.sleep(10)
-    motorA = Motor('A')
-    motorB = Motor('B')
-    motorA.set_default_speed(-100)
-    motorB.set_default_speed(100)
-    motorA.run_for_seconds(1, blocking=False)
-    motorB.run_for_seconds(1, blocking=False)
-    time.sleep(3)
+    try:
+        time.sleep(10)
+        motorA = Motor('A')
+        motorB = Motor('B')
+        motorA.set_default_speed(-100)
+        motorB.set_default_speed(100)
+        motorA.run_for_seconds(1, blocking=False)
+        motorB.run_for_seconds(1, blocking=False)
+        time.sleep(3)
+    except:
+        print("Motor connection failed")
