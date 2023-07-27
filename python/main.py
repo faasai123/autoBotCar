@@ -5,6 +5,7 @@ from huskylib import HuskyLensLibrary
 
 # global varibles
 wheel_circum = 6.88 # in cm
+distance_covered_in_1_second = 10 # in cm (from measurement with speed=100 on both wheels)
 motorL = Motor('A') # default
 motorR = Motor('B') # default
 green = 2 # the id we're looking for
@@ -25,8 +26,13 @@ def until_finds_hat(t):
             return False
 
 def cal_timeneeded(distance,speedL,speedR):
-    # calculate time needed for each given movement
-    time
+    # calculate time needed for each given movement using v = s/t -> t = s/v
+    if speedL == speedR: # if car is moving stright
+        speed = speedL * distance_covered_in_1_second
+    else:
+        return -1 # an error, both wheel should be moving at the same speed to find the time needed 
+    # time is calculated from using the rule of three of a given speed and 100 to given distance
+    time = distance/distance_covered_in_1_second * speed/100
     return time
 
 # huskylens functions
@@ -95,12 +101,13 @@ def movestraight(speed, t, block):
 # recursive function to wait for hat to be connected
 if until_finds_hat(30) is not None: # set maximum find time to 30 seconds
     time.sleep(1)
-    if validlearnedblocks():
-        current = searchlearnedblocks()
-        if current!=-1:
-            speed = decide(current)
-            if speed != [-1,-1]: # if founded red or green
-                moveseperately(speed[0],speed[1],False,1) # dist is still fixed case for testing -> t is always 2 s
+    if hl.algorthim("ALGORITHM_COLOR_RECOGNITION") is not None:
+        if validlearnedblocks():
+            current = searchlearnedblocks()
+            if current!=-1:
+                speed = decide(current)
+                if speed != [-1,-1]: # if founded red or green
+                    moveseperately(speed[0],speed[1],False,1) # dist is still fixed case for testing -> t is always 2 s
 
 # while True:
 #     print(motor.get_aposition())
