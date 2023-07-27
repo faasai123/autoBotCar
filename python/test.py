@@ -14,7 +14,7 @@ def until_finds_hat(t):
 
 # saves logs to cronlog in system
 now = datetime.now()
-current_time = now.strftime("%H:%M:%S")
+current_time = now.strftime("%d %b %H:%M:%S")
 print("Hello")
 print("Latest login =",current_time)
 
