@@ -208,6 +208,7 @@ def corner_find(): # decide to turn left or right at corners
                         resetmotors()
                         time.sleep(1)
                         print(angle,distance)
+                        lidar.stop()
                         return corner_turn()     
     except Exception as e:
         # print(e)
