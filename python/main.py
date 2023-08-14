@@ -1,8 +1,7 @@
 import time
 from buildhat import Motor, Hat
 from huskylib import HuskyLensLibrary
-from math import floor
-from adafruit_rplidar import RPLidar
+from rplidar import RPLidar
 
 
 # global varibles
@@ -16,12 +15,13 @@ hat = Hat()
 # Setup the huskylens
 hl = HuskyLensLibrary("I2C","",address=0x32)
 # Setup the RPLidar
-lidar = RPLidar(None, '/dev/ttyUSB0', timeout=3)
+lidar = RPLidar('/dev/ttyUSB0')
 
 max_distance = 3000.0 # max size of the area (in mm)
-wall_threshold = 300.0 # threshold for wall detection (in mm)
+wall_threshold = 150.0 # threshold for wall detection (in mm)
 scan_data = [0]*360 # raw data from lidar
 lidar_data = [0]*360 # processed data from lidar
+min_left = min_right = max_distance # variables for deciding to turn left or right at a corner
 
 # Define segments for each direction (adjust angles as needed)
 front_start, front_end = 0, 89
@@ -84,10 +84,10 @@ def decide(id):
         return [-1,-1] # error value -> found other colors that's not red or green
 
 # motor functions
-def resetmotors():
+def resetmotors(): # a function that tries to stop the motor before changing move speed
     motorL.stop()
     motorR.stop()
-    time.sleep(0.1)
+    time.sleep(0.5)
 
 def moveseperately(speedL,speedR,block,dist):
     #set up default speed according to input values
@@ -110,66 +110,123 @@ def movestraight(speed, t, block):
 
     # run motor L and R for t seconds with blocking setting (True = Wait for first op to end before running,
     # False = Run simultaneously)
-    motorL.run_for_seconds(t, blocking=block)
-    motorR.run_for_seconds(t, blocking=block)
+    motorL.start()
+    motorR.start()
     time.sleep(t)
     
 def movestraight_until_stop(speed):
     motorL.set_default_speed(-speed)
     motorR.set_default_speed(speed) 
-    motorL.start()
+    motorL.start() # function too start motor to move indefinately until motor.stop() is called
     motorR.start()
-    
-def stopmotor():
+# turn then move forward for 0.5 second (this is done inorder for motor speed to go back to normal before moving forward)
+def turn_left(t1):
+    motorL.run_for_seconds(t1,100,False)
+    motorR.run_for_seconds(t1,100,False)
+    time.sleep(t1)
+    t = 0.5
     motorL.stop()
     motorR.stop()
+    time.sleep(t)
+    motorL.run_for_seconds(t, blocking=False)
+    motorR.run_for_seconds(t, blocking=False)
+    time.sleep(t)
+
+def turn_right(t1):
+    motorL.run_for_seconds(t1,-100,False)
+    motorR.run_for_seconds(t1,-100,False)
+    time.sleep(t1)
+    t = 0.5
+    motorL.stop()
+    motorR.stop()
+    time.sleep(t)
+    motorL.run_for_seconds(t, blocking=False)
+    motorR.run_for_seconds(t, blocking=False)
+    time.sleep(t)
+    
 
 # lidar functions
-# def is_wall_nearby_in_direction(start_angle, end_angle):
-#     return any(distance < wall_threshold for distance in lidar_data[start_angle:end_angle+1])
+def isFront(angle):
+    return angle >= 0 and angle < 90
+def isLeft(angle):
+    return angle >= 90 and angle < 180
+def isBack(angle):
+    return angle >= 180 and angle < 270
+def isRight(angle):
+    return angle >= 270 and angle < 360
 
-def isFront(data):
-    return data[1] >= 0 and data[1] < 90
-def isLeft(data):
-    return data[1] >= 90 and data[1] < 180
-def isBack(data):
-    return data[1] >= 180 and data[1] < 270
-def isRight(data):
-    return data[1] >= 270 and data[1] < 360
-
-def find_walls(data):
+def find_walls(distance,angle):
     # Front angles [0, 90)
-    if isFront(data) and data[2] < wall_threshold:
+    if isFront(angle) and distance < wall_threshold:
         print("Front")
         return True
     # Right angles [90, 180)
-    if isRight(data) and data[2] < wall_threshold:
+    if isRight(angle) and distance < wall_threshold:
         print("Right")
         return True
-    # Back angles [180, 270)
-    if isBack(data) and data[2] < wall_threshold:
-        print("Back")
-        return True
+    # Back angles [180, 270) -> is ignored because of how the lidar sensor is placed
     # Left angles [270, 360)
-    if isLeft(data) and data[2] < wall_threshold:
+    if isLeft(angle) and distance < wall_threshold:
         print("Left")
         return True
     return False
+
+def corner_turn():
+    try:
+        start_time = time.time()
+        end_time = start_time + 1.0  # 1 second
+        for measurement in lidar.iter_scans():
+            print("scanning")
+            if time.time() > end_time():
+                lidar.stop()
+                break
+            for (_, angle, distance) in measurement:
+                if isLeft(angle):
+                    min_left = min(min_left,distance)
+                elif isRight(angle):
+                    min_right = min(min_right,distance)
+        print(min_left,min_right)
+        if min_left > min_right: # right wall is closer -> a left turn
+            print("Turn Left")
+            resetmotors()
+            turn_left()
+        else: # left wall is closer -> a right turn
+            print("Turn Right")
+            resetmotors()
+            turn_right()
+        return 1
+    except Exception as e:
+        return -1
+
+def corner_find(): # decide to turn left or right at corners
+    try:
+        for measurement in lidar.iter_scans():
+            for (_, angle, distance) in measurement:
+                if distance != 0:
+                    # print(angle,distance,isFront(angle))
+                    if isFront(angle) and find_walls(distance,angle): # if find wall infront closer than wall_threshold
+                        resetmotors()
+                        time.sleep(1)
+                        print(angle,distance)
+                        return corner_turn()     
+    except Exception as e:
+        # print(e)
+        return -1
+        
 
 def get_data():
     try:
         stop_flag = False  # Flag variable to indicate when to stop the outer loop
         for measurement in lidar.iter_scans():
             # list of tuple -> quality, degree, distance
-            # print(measurement)
-            for data in measurement:
-                if data[2] != 0:
-                    print(data[2])
-                    if find_walls(data):
+            for (_, angle, distance) in measurement:
+                if distance != 0:
+                    print(distance,angle)
+                    if find_walls(distance,angle):
                         stop_flag = True
-                        break  # Stop the inner loop
+                        break # stop the inner loop
             if stop_flag:
-                stopmotor()
+                resetmotors()
                 break  # Stop the outer loop
         return 1
     except Exception as e:
@@ -177,20 +234,20 @@ def get_data():
         return -1
 
 # main starts here
-# movestraight(100,10,False)
 # recursive function to wait for hat to be connected
 if until_finds_hat(30) is not None: # set maximum find time to 30 seconds
     time.sleep(1)
-    if hl.algorthim("ALGORITHM_COLOR_RECOGNITION") is not None:
-        if validlearnedblocks():
-            current = searchlearnedblocks()
-            if current!=-1:
-                speed = decide(current)
-                if speed != [-1,-1]: # if founded red or green
-                    moveseperately(speed[0],speed[1],False,1) # dist is still fixed case for testing -> t is always 2 s
-    resetmotors()
     movestraight_until_stop(20)
-    get_data()
+    print("moving")
+    while True:
+        flag = False
+        if corner_find()==1:
+            lidar.stop()
+            print("Found")
+            min_left = min_right = 0
+        else:
+            pass
+            # print("error")
     
 lidar.stop_motor()
 lidar.stop()
@@ -198,3 +255,4 @@ lidar.disconnect()
     
 # while True:
 #     print(motor.get_aposition())
+
