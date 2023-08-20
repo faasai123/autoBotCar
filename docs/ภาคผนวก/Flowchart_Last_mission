@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-08-20T16:28:28.223Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" version="20.6.0" etag="qPDn4I3M4ViOR3m70Koc" type="github">
+<mxfile host="app.diagrams.net" modified="2023-08-20T16:29:50.139Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" version="20.6.0" etag="ft1TIfcLTQIbJELq2C0g" type="github">
   <diagram id="9sjo-GoE97fyZgsmenzz" name="Page-1">
-    <mxGraphModel dx="5564" dy="12124" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
+    <mxGraphModel dx="7128" dy="13048" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -448,7 +448,7 @@
         <mxCell id="gFAKHO2mj9bXPXjOLCXx-107" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" edge="1" parent="1" source="gFAKHO2mj9bXPXjOLCXx-103" target="gFAKHO2mj9bXPXjOLCXx-101">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="-3430" y="-8255" />
+              <mxPoint x="-3430" y="-8275" />
               <mxPoint x="-3430" y="-8428" />
             </Array>
           </mxGeometry>
@@ -458,18 +458,16 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="gFAKHO2mj9bXPXjOLCXx-110" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontSize=16;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="gFAKHO2mj9bXPXjOLCXx-103" target="gFAKHO2mj9bXPXjOLCXx-111">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-3309.4117647058824" y="-8090" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="gFAKHO2mj9bXPXjOLCXx-138" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" edge="1" parent="1" source="gFAKHO2mj9bXPXjOLCXx-103" target="gFAKHO2mj9bXPXjOLCXx-137">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="gFAKHO2mj9bXPXjOLCXx-112" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" vertex="1" connectable="0" parent="gFAKHO2mj9bXPXjOLCXx-110">
-          <mxGeometry x="-0.236" y="-2" relative="1" as="geometry">
+        <mxCell id="gFAKHO2mj9bXPXjOLCXx-139" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" vertex="1" connectable="0" parent="gFAKHO2mj9bXPXjOLCXx-138">
+          <mxGeometry x="-0.2439" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="gFAKHO2mj9bXPXjOLCXx-103" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Does rplidar find last traffic light pole?&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-3394.38" y="-8340" width="170" height="170" as="geometry" />
+          <mxGeometry x="-3394.38" y="-8360" width="170" height="170" as="geometry" />
         </mxCell>
         <mxCell id="gFAKHO2mj9bXPXjOLCXx-116" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" edge="1" parent="1" source="gFAKHO2mj9bXPXjOLCXx-111" target="gFAKHO2mj9bXPXjOLCXx-115">
           <mxGeometry relative="1" as="geometry" />
@@ -533,6 +531,12 @@
         </mxCell>
         <mxCell id="gFAKHO2mj9bXPXjOLCXx-130" value="Go to right lane" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" vertex="1" parent="1">
           <mxGeometry x="-3369.38" y="-7530" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gFAKHO2mj9bXPXjOLCXx-140" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" edge="1" parent="1" source="gFAKHO2mj9bXPXjOLCXx-137" target="gFAKHO2mj9bXPXjOLCXx-111">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gFAKHO2mj9bXPXjOLCXx-137" value="Wait 3 second" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="-3369.38" y="-8135" width="120" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
